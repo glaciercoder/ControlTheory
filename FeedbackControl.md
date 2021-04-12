@@ -7,10 +7,6 @@ Thanks for fellow xzy's support.
 
 # Week1
 
-
-
-
-
 ## Basic Ideas for Feedback Control
 1. Control is the process of making a system variable adhere to a particular value, called the **reference value**. A system designed to follow a changing reference is called **tracking control or a servo**. A system designed to maintain an output fixed regardless of the disturbances present is called a **regulating control or a regulator**.
 2. A simple feedback system consists of the **process (or plant)**whose output is to be controlled, the **actuator** whose output causes the process output to change, a reference command signal, and output sensors that measure these signals, and the **controller** that implements the logic by which the control signal that commands the actuator is calculated. 
@@ -137,7 +133,7 @@ plot(t,y1);   % plot output response
 
 The usage of several functions :
 
-[poly](https://www.mathworks.com/help/matlab/ref/poly.html)
+[poly](https://www.mathworks.com/help/matlab/ref/poly.html)     [roots](https://www.mathworks.com/help/matlab/ref/roots.html?searchHighlight=roots&s_tid=srchtitle)
 
 [residue](https://www.mathworks.com/help/matlab/ref/residue.html)
 
@@ -188,7 +184,6 @@ According to the standard response, we can analyze the domain specifications
    t_r = \frac{1.8}{\omega_n}
    $$
    
-
 2. Overshoot and Peak time
 
    Analytically, we have
@@ -197,7 +192,6 @@ According to the standard response, we can analyze the domain specifications
    M_p = e^{-\pi\tan\beta}
    $$
    
-
 3. Settling Time
 
    Define the settling time as that value of when the decaying exponential reaches 1%:
@@ -210,9 +204,7 @@ According to the standard response, we can analyze the domain specifications
 
    ### Effects of Zeros and Additional Poles
 
-   At the level of transient analysis, the zeros exert their influence by modifying the coefficients of the exponential terms whose shape is decided by the poles, which is called **Mode**.
-
-   In general, a zero near a pole reduces the amount of that term in the total response.
+   At the level of transient analysis, the zeros exert their influence by modifying the coefficients of the exponential terms whose shape is decided by the poles, which is called **Mode**. In general, a zero near a pole reduces the amount of that term in the total response.
 
    The analysis of zeors is devide the tf into the two parts, the former being the initial response, the latter regarded as the derivative of the inital response multiplied by a constant.
 
@@ -220,7 +212,116 @@ According to the standard response, we can analyze the domain specifications
 
    Placing the complex zeros near the locations of the lightly damped poles may provide sufficient improvement in step response performance. 
 
+   We can get the following experience:
+
+   1. A zero in the left half-plane (LHP) will increase the overshoot if the zero is within a
+
+      factor of 4 of the real part of the complex poles. 								.
+
+   2. A zero in the RHP will depress the overshoot (and may cause the step response to
+
+      start out in the wrong direction).
+
+   3. An additional pole in the LHP will increase the rise time significantly if the extra pole is
+
+      within a factor of 4 of the real part of the complex poles.
+
    
+
+   
+
+   
+
+   
+
+# Week 2
+
+   ## Stability
+
+   Thic section mainly foucs on the LTI system's stability.
+
+   A basic condition for the stability is:
+
+   >An LTI system is said to be stable if all the roots of the transfer function denominator polynomial have negative real parts , and is unstable otherwise.
+
+   ### BIBO Stability
+
+   > A system is said to have **bounded input–bounded output (BIBO) stability** if every bounded input results in a bounded output.
+
+   We can get a equivalent condition  of BIBO:
+
+   > The system with impluse response being h(t) is BIBO-stable if and only-if:
+   > $$
+   > \int_{-\infty}^{\infty}|h(\tau)|d\tau < \infty
+   > $$
+   > 
+
+   If all poles are LHP, the stability is called **internal stability**. If there are no repeated pure imaginary pole, the stability is called **neutrally stable**.
+
+   
+
+   The most simple necessary condition 
+
+   > A necessary (but not sufficient) condition for stability is that all the coefficients of the characteristic polynomial be positive.
+
+   Attention must be paid in using this criterion is than all coefficients must be positive. If 0 and negative appears, another methoed must be taken.
+
+   The sufficient and necessary condition of BIBO stable is given by Routh-Hurwitz criterion. Routh-Hurwitz criterion not only gives the result of stability, but gives the number of LHP roots.
+
+   [Routh-Hurwitz criterion](https://en.wikipedia.org/wiki/Routh%E2%80%93Hurwitz_stability_criterion)
+
+   
+
+   Matlab can be used to draw the implicit function using [fimplicit](https://www.mathworks.com/help/matlab/ref/fimplicit.html)
+
+   
+
+   ## A First Analysis of Feedback 
+
+This part mainly discusses LTI SISO system.
+
+The general structure of open-loop system is :
+
+<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 3.30.18 PM.png" alt="Screen Shot 2021-04-12 at 3.30.18 PM" style="zoom:50%;" />
+
+If $D_{ol} = \frac{c(s)}{d(s)},G(s) = \frac{b(s)}{a(s)}$, the open-loop gain is $D_{ol}G = \frac{bc}{ad}$
+
+What matters is that the poles in d(s) **can not** be cacelled out by the zero of b(s), even if it is reasonable in mathematics, a slight noise will cause the system break down. We can conclude that
+
+> An open-loop structure *can not* be used to make an unstable plant to be stable, and therefore cannot be used if the plant is already unstable.
+
+Another fatal point of open-loop is that the controller has nothing to do with the disturbance W(s), so the loop-control can't be used as a regulator .
+
+
+
+The general structure of feedback system is :
+
+<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 3.12.50 PM.png" alt="Screen Shot 2021-04-12 at 3.12.50 PM" style="zoom:50%;" />
+
+The basic equations are 
+$$
+Y_{cl} = \frac{D_{cl}G}{1+D_{cl}G}R+\frac{G}{1+D_{cl}G}W-\frac{D_{cl}G}{1+D_{cl}G}V\\
+E_{cl} = \frac{1}{1+D_{cl}G}R-\frac{G}{1+D_{cl}G}W+\frac{D_{cl}G}{1+D_{cl}G}V
+$$
+We define
+$$
+S = \frac{1}{1+D_{cl}G}\\
+\mathcal{J} =\frac{D_{cl}G}{1+D_{cl}G}\\
+$$
+then
+$$
+Y_{cl} = \mathcal{J}R+GSW-\mathcal{J}V\\
+E_{cl} = SR-GSW+\mathcal{J}V
+$$
+
+
+### The trade-off in the two disturbances 
+
+According to the basic equation, if we increase the $D_{cl}$ to resist the W(s), the disturbance from V(s) will increase.
+
+The method of the dilemma is to design the controller that has different gains in the different frequency. Since the W(s) and V(s) have differenct properties. The environment disturbances are always of low frequency, somtimes are just a bias, while the sensor disturbances are always of high frequency.
+
+
 
    
 
