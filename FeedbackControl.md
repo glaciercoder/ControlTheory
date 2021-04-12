@@ -9,11 +9,15 @@ Thanks for fellow xzy's support.
 
 
 
+
+
 ## Basic Ideas for Feedback Control
 1. Control is the process of making a system variable adhere to a particular value, called the **reference value**. A system designed to follow a changing reference is called **tracking control or a servo**. A system designed to maintain an output fixed regardless of the disturbances present is called a **regulating control or a regulator**.
 2. A simple feedback system consists of the **process (or plant)**whose output is to be controlled, the **actuator** whose output causes the process output to change, a reference command signal, and output sensors that measure these signals, and the **controller** that implements the logic by which the control signal that commands the actuator is calculated. 
 3. A well-designed feedback control system will be **stable, track a desired input or setpoint , reject disturbances, and be insensitive (or robust) to changes in the math model used for design**.
 4. The theory and design techniques of control have come to be divided into two categories: **classical control** methods use Laplace transforms (or z-transform) and were the dominant methods for control design until **modern control** methods based on ODEs in state form were introduced into the field starting in the 1960s. 
+
+
 
 ## Dynamic models
 ###  Step response with Matlab
@@ -66,6 +70,10 @@ $$
 i_{+} = i_{-} = 0 \\
 v_{+} - v_{-} = 0
 $$
+
+
+
+
 
 ## Dynamic Reponse
 
@@ -136,6 +144,91 @@ The usage of several functions :
 [zero](https://www.mathworks.com/help/control/ref/lti.zero.html?searchHighlight=zero&s_tid=srchtitle)      [pole](https://www.mathworks.com/help/control/ref/lti.pole.html?searchHighlight=pole&s_tid=srchtitle)
 
 [lsim](https://www.mathworks.com/help/control/ref/lti.lsim.html?searchHighlight=lsim&s_tid=srchtitle)
+
+### System Modeling Diagrams
+
+<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 7.23.01 AM.png" alt="Screen Shot 2021-04-12 at 7.23.01 AM" style="zoom: 50%;" />
+
+$G_1$is called **Forward Gain**, $G_1G_2$is called **Loop Gain**. Set the s = 0, we get **DC gain**.
+
+The diagram can be transformed to facilitate the analysis
+
+<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 7.31.55 AM.png" alt="Screen Shot 2021-04-12 at 7.31.55 AM" style="zoom:33%;" />
+
+The feedback in (c) is called **Unity Feedback**
+
+### Second order system and time domain specifications
+
+The standard form of the second order system is
+$$
+H(s) = \frac{1}{s^2+2\zeta\omega_ns+\omega_n^2}
+$$
+where $\zeta$ is the damp ratio, $\omega_n$ is the natural frequency.
+
+The standard impulse response :
+$$
+h(t) = \frac{\omega_n}{\sqrt{1-\zeta^2}}e^{-\sigma t}\sin(\omega_d t)
+$$
+The standard step response:
+$$
+y(t) = 1-\frac{e^{-\sigma t}}{\sqrt{1-\zeta^2}}\cos(\omega_dt-\beta)
+$$
+where 
+$$
+\sigma = \zeta\omega_n\\
+\omega_d=\sqrt{1-\zeta^2}\omega_n\\
+\beta = \arctan(\frac{\zeta}{\sqrt{1-\zeta^2}})
+$$
+According to the standard response, we can analyze the domain specifications
+
+1. Rise Time
+
+   For a second-order system with no zeros, we have
+   $$
+   t_r = \frac{1.8}{\omega_n}
+   $$
+   
+
+2. Overshoot and Peak time
+
+   Analytically, we have
+   $$
+   t_p = \frac{\pi}{\omega_d}\\
+   M_p = e^{-\pi\tan\beta}
+   $$
+   
+
+3. Settling Time
+
+   Define the settling time as that value of when the decaying exponential reaches 1%:
+   $$
+   t_s = \frac{4.6}{\sigma}
+   $$
+   
+
+   In s-plane, the above relationship can help us to choose the reasonable poles location.
+
+   ### Effects of Zeros and Additional Poles
+
+   At the level of transient analysis, the zeros exert their influence by modifying the coefficients of the exponential terms whose shape is decided by the poles, which is called **Mode**.
+
+   In general, a zero near a pole reduces the amount of that term in the total response.
+
+   The analysis of zeors is devide the tf into the two parts, the former being the initial response, the latter regarded as the derivative of the inital response multiplied by a constant.
+
+   The zero in the right half plane is called **RHP** or **nonminimum-phase zero**
+
+   Placing the complex zeros near the locations of the lightly damped poles may provide sufficient improvement in step response performance. 
+
+   
+
+   
+
+   
+
+   
+
+   
 
 
 
