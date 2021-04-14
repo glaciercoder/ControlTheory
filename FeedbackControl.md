@@ -206,7 +206,7 @@ According to the standard response, we can analyze the domain specifications
 
    At the level of transient analysis, the zeros exert their influence by modifying the coefficients of the exponential terms whose shape is decided by the poles, which is called **Mode**. In general, a zero near a pole reduces the amount of that term in the total response.
 
-   The analysis of zeors is devide the tf into the two parts, the former being the initial response, the latter regarded as the derivative of the inital response multiplied by a constant.
+   The analysis of zeros is deviding the tf into the two parts, the former being the initial response, the latter regarded as the derivative of the inital response multiplied by a constant.
 
    The zero in the right half plane is called **RHP** or **nonminimum-phase zero**
 
@@ -250,7 +250,7 @@ According to the standard response, we can analyze the domain specifications
 
    We can get a equivalent condition  of BIBO:
 
-   > The system with impluse response being h(t) is BIBO-stable if and only-if:
+   > The system with impulse response being h(t) is BIBO-stable if and only-if:
    > $$
    > \int_{-\infty}^{\infty}|h(\tau)|d\tau < \infty
    > $$
@@ -286,7 +286,7 @@ The general structure of open-loop system is :
 
 If $D_{ol} = \frac{c(s)}{d(s)},G(s) = \frac{b(s)}{a(s)}$, the open-loop gain is $D_{ol}G = \frac{bc}{ad}$
 
-What matters is that the poles in d(s) **can not** be cacelled out by the zero of b(s), even if it is reasonable in mathematics, a slight noise will cause the system break down. We can conclude that
+What matters is that the poles in d(s) **can not** be cancelled out by the zero of b(s), even if it is reasonable in mathematics, a slight noise will cause the system break down. We can conclude that
 
 > An open-loop structure *can not* be used to make an unstable plant to be stable, and therefore cannot be used if the plant is already unstable.
 
@@ -319,7 +319,58 @@ $$
 
 According to the basic equation, if we increase the $D_{cl}$ to resist the W(s), the disturbance from V(s) will increase.
 
-The method of the dilemma is to design the controller that has different gains in the different frequency. Since the W(s) and V(s) have differenct properties. The environment disturbances are always of low frequency, somtimes are just a bias, while the sensor disturbances are always of high frequency.
+The method of the dilemma is to design the controller that has different gains in the different frequency. Since the W(s) and V(s) have different properties. The environment disturbances are always of low frequency, somtimes are just a bias, while the sensor disturbances are always of high frequency.
+
+### Sensitivity
+
+We define the sensitivity in open loop system:
+$$
+S_{G}^{T} = \frac{\frac{dT_{ol}}{T_{ol}}}{\frac{dG}{G}}
+$$
+Since $T_{ol} = D_{ol}G$, if we take $D_{ol}$ approximately as a constant, we get $S_{G}^{T} = 1$ for open loop system.
+
+Similarly, we can define the same concept in closed-loop system:
+$$
+S_{G}^{T} = \frac{\frac{dT_{cl}}{T_{cl}}}{\frac{dG}{G}}
+$$
+We get
+$$
+S_{G}^{T} = \frac{1}{1+D_{cl}G}
+$$
+We see $S_{G}^{T}$ is exactly we defined as S in the basic equations of feedback system. we call S as **Sensitivity Function**, and $\mathcal{J}$ as **complementary sensitivity function**.
+
+For the case where there is a non-unity pre filter F (s) following the reference input, R(s) , and non-unity sensor dynamics H (s) , the
+equations for the system output and the various sensitivity functions need to be re-derived.
+
+### System Type
+
+In the general tracking problem, the reference input can often be adequately approximated as if it were a polynomial in time. So it's useful to analyze 
+
+**steady-state errors in stable systems with polynomial inputs**.
+
+We have
+$$
+\mathcal{L}(\frac{t^k}{k!}) = \frac{1}{s^{k+1}}
+$$
+If there are n integral in $GD_{cl}$, we can set
+$$
+K_{n} = s^nGD_{cl}
+$$
+Then the steady-state error for input $\frac{1}{s^{k+1}}$ is
+$$
+\lim\limits_{t \to +\infty} R(t) = \lim\limits_{s \to 0}\frac{s^n}{s^n+K_n}\frac{1}{s^k}
+$$
+
+
+
+
+
+
+
+
+
+
+
 
 
 
