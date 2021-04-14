@@ -1,5 +1,5 @@
 # Getting started
-This note is written mainly for learning Feedback Control via reading *Feedback Control of Dynamic Systems* and some papers. 
+This note is written mainly for learning Feedback Control via reading *Feedback Control of Dynamic Systems* and some papers. The pictures, if not marked specially, are from the original book.
 
 Thanks for fellow xzy's support.
 
@@ -145,7 +145,7 @@ The usage of several functions :
 
 <img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 7.23.01 AM.png" alt="Screen Shot 2021-04-12 at 7.23.01 AM" style="zoom: 50%;" />
 
-$G_1$is called **Forward Gain**, $G_1G_2$is called **Loop Gain**. Set the s = 0, we get **DC gain**.
+$G_1$is called **Forward Gain**, $G_1G_2$is called **Loop Gain**. Set the s = 0, we get **DC gain**, which is the gain for a step input.
 
 The diagram can be transformed to facilitate the analysis
 
@@ -358,9 +358,82 @@ K_{n} = s^nGD_{cl}
 $$
 Then the steady-state error for input $\frac{1}{s^{k+1}}$ is
 $$
-\lim\limits_{t \to +\infty} R(t) = \lim\limits_{s \to 0}\frac{s^n}{s^n+K_n}\frac{1}{s^k}
+\lim\limits_{t \to +\infty} E(t) = \lim\limits_{s \to 0}\frac{s^n}{s^n+K_n}\frac{1}{s^k}
 $$
 
+The system's steady-state error is decided by n and k
+
+| n and k relationship | Steady-state error |
+| :------------------: | :----------------: |
+|        n > k         |         0          |
+|        n < k         |      $\infty$      |
+|      n = k = 0       | $\frac{1}{1+K_0}$  |
+|    $n = k \neq 0$    |  $\frac{1}{K_n}$   |
+
+ n is called **Systme Type**,     $K_n = \lim\limits_{s \to 0}s^nGD_{cl}$  are called **error constants**
+
+We see that a system has no steady-state error only if system type is higher than the order of reference point.
+
+The other perspective regarding the system type is that for an unit-feedback system, if parameters in Plant change without the moving of zero poles, then the steady-state error will still be zero, which is called **robust property of unity feedback system**
+
+For non-unitfeedback system, system type can be defined via close-loop transfer function $\mathcal{J}(s)$.
+
+<img src="FeedbackControl.assets/Screen Shot 2021-04-14 at 10.14.48 AM.png" alt="Screen Shot 2021-04-14 at 10.14.48 AM" style="zoom: 33%;" />
+$$
+E(s) = (1-\mathcal{J(s)})R(s)\\
+\lim\limits_{t \to +\infty} E(t) = \lim\limits_{s \to 0} \frac{1}{s^k}(1-\mathcal{J(s)})
+$$
+The critical *s* which makes the steady-state error a constant is defined as the system type.
+
+### System Type for Regulation and Disturbance Rejection
+
+If we set reference to 0, namely, a regulator, then the error is caused by the disturbance W(s). We can take the W(s) as the reference point and define system type the same way above.
+
+### PID Controller
+
+1. P controller
+
+   >$u(t) = k_pe(t)$,$k_p$ for **proportional gain**
+
+   For a simple 2-order system, the system is 0 type. With the increase of $k_p$, the steady-state error will decrease, but the settling time will not be improved. The damping will decrease, which means that the oscillation will increase. System type of disturbance W(s) is also 0, which means that a step disturbance will also cause a steady-state error.
+
+   For systems beyond second order, the situation is more complicated. A higher gain will increase the speed of response but typically at the cost of a larger transient overshoot and less overall damping.
+
+2. I controller 
+
+   > $u(t) = k_I\int_{t_0}^{t}e(\tau)d\tau$, $k_I$ for **integral gain**
+
+   Integral feedback results in zero steady- state output error in both tracking and disturbance rejection. Since addition of integral control to the G(s) typically makes the system a Type 1, the  **robust property ** is reserved.
+
+    However, integral control typically decreases the damping or stability of a system.
+
+3. D controller
+
+   > $u(t) = k_d\dot{e}(t)$, $k_d$ for **derivative gain**
+
+   Derivative control is almost never used by itself; it is usually augmented by proportional control. Since the D controller takes control action based on the trend in the error signal, it is said to have an “anticipatory” behavior.
+
+   Sometimes the D controller is used as below to cancell the abrupt change in W(s):
+
+   <img src="FeedbackControl.assets/Screen Shot 2021-04-14 at 11.17.15 AM.png" alt="Screen Shot 2021-04-14 at 11.17.15 AM" style="zoom:33%;" />
+
+
+
+### Feedforward Control
+
+The basic idea of feedforward control is that if we can get the inverse of the DC gain of G(s), we can directly send the error into the plant to compensate for the error as shown below:
+
+<img src="FeedbackControl.assets/Screen Shot 2021-04-14 at 11.43.00 AM.png" alt="Screen Shot 2021-04-14 at 11.43.00 AM" style="zoom:33%;" />
+
+<img src="FeedbackControl.assets/Screen Shot 2021-04-14 at 11.43.17 AM.png" alt="Screen Shot 2021-04-14 at 11.43.17 AM" style="zoom:33%;" />
+
+
+
+
+
+
+
+## The Root-Locus Design Method
 
 
 
@@ -374,13 +447,6 @@ $$
 
 
 
-   
-
-   
-
-   
-
-   
 
 
 
