@@ -431,13 +431,50 @@ The basic idea of feedforward control is that if we can get the inverse of the D
 
 
 
-
+# Week 3
 
 ## The Root-Locus Design Method
 
+For a closed-loop system, the characteristic equation 
+$$
+1+D_c(s)G(s)H(s) = 0
+$$
+can be written as **root locus form**:
+$$
+1+KL(s) = 0
+$$
+where K is our concerned parameter, 
+
+The **breakaway points**(root move away from the real axis) and the **break-in points**(root move into the real axis) are important in root locus.
+
+Grenerally, it's hard to get the root locus explicitly. Evans proposed a set of rules to draw root locus.
+
+### Guidelines for Determining a Root Locus
+
+If the parameter K is real and positive, we call the locus **positive locus** or **$180^{\circ}$ locus** since the phase of L(s) must be $180^{\circ}$ to satisfy the equation or else we get **negative locus** or **$0^{\circ}$ locus**. We discuss positive locus here.
+
+Set  $L(s) = \frac{b(s)}{a(s)}$, b(s) is a polynomial of m degrees, a(s) is a polynomial of n degrees.
+
+1. The n branches of the locus start at the poles of L(s) and m of these branches end on the zeros of L(s).
+
+2. The loci are on the real axis to the left of an odd number of poles and zeros.
+
+3. The asymptotic line of loci: (n-m) branches of the loci are asymptotic to lines at angles $\phi_l$ radiating out from the point $s = \alpha$ on the real axis, where 
+
+$$
+\phi_l = \frac{180^{\circ}+360^{\circ}(l-1)}{n-m},l=1,2,\dots,n-m\\
+\alpha = \frac{\sum p_i-\sum z_i}{n-m}
+$$
+
+4. 
 
 
 
+
+
+
+
+ 
 
 
 
