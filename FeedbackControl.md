@@ -3,13 +3,15 @@ This note is written mainly for learning Feedback Control via reading *Feedback 
 
 Thanks for fellow xzy's support.
 
+​																																													*Written by Bingchuan Wei*
+
 
 
 # Week1
 
 ## Basic Ideas for Feedback Control
 1. Control is the process of making a system variable adhere to a particular value, called the **reference value**. A system designed to follow a changing reference is called **tracking control or a servo**. A system designed to maintain an output fixed regardless of the disturbances present is called a **regulating control or a regulator**.
-2. A simple feedback system consists of the **process (or plant)**whose output is to be controlled, the **actuator** whose output causes the process output to change, a reference command signal, and output sensors that measure these signals, and the **controller** that implements the logic by which the control signal that commands the actuator is calculated. 
+2. A simple feedback system consists of the **process **whose output is to be controlled, the **actuator/plant** whose output causes the process output to change, a reference command signal, and output sensors that measure these signals, and the **controller** that implements the logic by which the control signal that commands the actuator is calculated. 
 3. A well-designed feedback control system will be **stable, track a desired input or setpoint , reject disturbances, and be insensitive (or robust) to changes in the math model used for design**.
 4. The theory and design techniques of control have come to be divided into two categories: **classical control** methods use Laplace transforms (or z-transform) and were the dominant methods for control design until **modern control** methods based on ODEs in state form were introduced into the field starting in the 1960s. 
 
@@ -40,31 +42,26 @@ The MUX(multiplexer) block in simulink can combine the signal from multi channl 
 ### Distributed Parameter Systems
 For systems with flexible parts in it(like a rod), the dynamic equation will always a high order equation. eg.
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-09 at 6.36.39 PM.png" alt="Screen Shot 2021-04-09 at 6.36.39 PM" style="zoom:25%;" />
-
-
-
-Where 
 $$
 \frac{\partial^4 w}{\partial x^4} +\rho\frac{\partial^2 w}{\partial t^2} = 0
 $$
 
 To simplify the distributed parameter, we can regrad the system as two or more rigid bodies connected by springs, the result is sometimes called a **lumped parameter model**.
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-09 at 6.44.32 PM.png" alt="Screen Shot 2021-04-09 at 6.44.32 PM" style="zoom:25%;" />
+<img src="FeedbackControl.assets/Screen Shot 2021-04-09 at 6.44.32 PM.png" alt="Screen Shot 2021-04-09 at 6.44.32 PM" style="zoom:25%;" />
 
 ### Operational amplifier
 
 Operational amplifier is basic in circuit system.A operation amplifier's symbol and its schematic are shown below:
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-09 at 7.01.38 PM.png" alt="Screen Shot 2021-04-09 at 7.01.38 PM" style="zoom:25%;" />
+<img src="FeedbackControl.assets/Screen Shot 2021-04-09 at 7.01.38 PM.png" alt="Screen Shot 2021-04-09 at 7.01.38 PM" style="zoom:25%;" />
 
 The third picture means the v+ is connected to the GND.
 
 Basic equation of operational amplifier are:
 $$
 i_{+} = i_{-} = 0 \\
-v_{+} - v_{-} = 0
+v_{+} -v_{-} = 0
 $$
 
 
@@ -72,6 +69,19 @@ $$
 
 
 ## Dynamic Reponse
+
+### Exponential signal response
+
+The dynamic response for a singal with the form $u(t)=e^(s_0t)$ is very important, and is closely connected with the frequency response.
+$$
+y(t) = \int_{-\infty}^{+\infty}h(\tau)u(t-\tau)d\tau = \int_{-\infty}^{+\infty}h(\tau)e^{-s_0\tau}d\tau e^{s_0t}=H(s_0)e^{s_0t}
+$$
+The frequency reponse 
+$$
+u(t) = A\cos(\omega t)\\
+y(t) = A\frac{H(j\omega)e^{j\omega t}+H(-j\omega)e^{-j\omega t}}{2}=AM\cos(\omega t+\phi)
+$$
+Where $M =|H(j\omega)|, \phi=\ang H(j\omega)$
 
 ###   Bode Plots and Matlab implementation 
 
@@ -143,13 +153,13 @@ The usage of several functions :
 
 ### System Modeling Diagrams
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 7.23.01 AM.png" alt="Screen Shot 2021-04-12 at 7.23.01 AM" style="zoom: 50%;" />
+<img src="FeedbackControl.assets/Screen Shot 2021-04-12 at 7.23.01 AM.png" alt="Screen Shot 2021-04-12 at 7.23.01 AM" style="zoom: 50%;" />
 
 $G_1$is called **Forward Gain**, $G_1G_2$is called **Loop Gain**. Set the s = 0, we get **DC gain**, which is the gain for a step input.
 
 The diagram can be transformed to facilitate the analysis
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 7.31.55 AM.png" alt="Screen Shot 2021-04-12 at 7.31.55 AM" style="zoom:33%;" />
+<img src="FeedbackControl.assets/Screen Shot 2021-04-12 at 7.31.55 AM.png" alt="Screen Shot 2021-04-12 at 7.31.55 AM" style="zoom:33%;" />
 
 The feedback in (c) is called **Unity Feedback**
 
@@ -157,7 +167,7 @@ The feedback in (c) is called **Unity Feedback**
 
 The standard form of the second order system is
 $$
-H(s) = \frac{1}{s^2+2\zeta\omega_ns+\omega_n^2}
+H(s) = \frac{\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2}
 $$
 where $\zeta$ is the damp ratio, $\omega_n$ is the natural frequency.
 
@@ -202,9 +212,11 @@ According to the standard response, we can analyze the domain specifications
 
    In s-plane, the above relationship can help us to choose the reasonable poles location.
 
-   ### Effects of Zeros and Additional Poles
+### Effects of Zeros and Additional Poles
 
-   At the level of transient analysis, the zeros exert their influence by modifying the coefficients of the exponential terms whose shape is decided by the poles, which is called **Mode**. In general, a zero near a pole reduces the amount of that term in the total response.
+   Basically, a zero in $s_0$ blocks the input of generalized frequency $s_0$ , while the pole decieds the natrural of unfored behavior of the system which is called **Mode**.(We call impulse response as **natural response**) 
+
+   At the level of transient analysis, the zeros exert their influence by modifying the coefficients of the **Mode**. In general, a zero near a pole reduces the amount of that term in the total response.
 
    The analysis of zeros is deviding the tf into the two parts, the former being the initial response, the latter regarded as the derivative of the inital response multiplied by a constant.
 
@@ -226,7 +238,7 @@ According to the standard response, we can analyze the domain specifications
 
       within a factor of 4 of the real part of the complex poles.
 
-   
+   For some explanation, see https://courses.engr.illinois.edu/ece486/fa2017/documents/lecture_notes/effects_zero_pole.pdf
 
    
 
@@ -282,7 +294,7 @@ This part mainly discusses LTI SISO system.
 
 The general structure of open-loop system is :
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 3.30.18 PM.png" alt="Screen Shot 2021-04-12 at 3.30.18 PM" style="zoom:50%;" />
+<img src="FeedbackControl.assets/Screen Shot 2021-04-12 at 3.30.18 PM.png" alt="Screen Shot 2021-04-12 at 3.30.18 PM" style="zoom:50%;" />
 
 If $D_{ol} = \frac{c(s)}{d(s)},G(s) = \frac{b(s)}{a(s)}$, the open-loop gain is $D_{ol}G = \frac{bc}{ad}$
 
@@ -296,7 +308,7 @@ Another fatal point of open-loop is that the controller has nothing to do with t
 
 The general structure of feedback system is :
 
-<img src="/Users/glacier/Desktop/SRT/Agile_Vehicle/my/control_theory/ControlTheory/FeedbackControl.assets/Screen Shot 2021-04-12 at 3.12.50 PM.png" alt="Screen Shot 2021-04-12 at 3.12.50 PM" style="zoom:50%;" />
+<img src="FeedbackControl.assets/Screen Shot 2021-04-12 at 3.12.50 PM.png" alt="Screen Shot 2021-04-12 at 3.12.50 PM" style="zoom:50%;" />
 
 The basic equations are 
 $$
@@ -466,7 +478,127 @@ $$
 \alpha = \frac{\sum p_i-\sum z_i}{n-m}
 $$
 
-4. 
+4. The break-in point and breakaway points satisfy the equation $\frac{dK}{ds} = 0$, and K must be positive.
+5. Departure angle and arrival angle.
+6. The intersection point with imaginary axis: Routh Criterion.
+
+
+
+
+
+## The Frequency-Response Design Method
+
+The frequency-response method is the most-widely used method in feedback control system for the effect of alleviating the uncertainties. It is also cost-effective since the method only needs the response of sinusoidal input without the knowledge of the poles and zeros for the system.
+
+### Frequency Response
+
+A linear system’s response to sinusoidal inputs is called the system’s **frequency response**.
+
+The first thing we see is the frequency response of the linear constant system with transfer function G(s):
+$$
+Input: u(t) = A\sin(\omega_0t)1(t)\\
+U(s) = \frac{A\omega_0}{s^2+\omega_0^2}\\
+Y(s)=G(s)U(s)=\sum_{i=1}^{n}\frac{\alpha_i}{s-p_i}+\frac{\alpha_0}{s+j\omega_0}+\frac{\alpha_0^*}{s-j\omega_0},where \quad |\alpha_0|=\frac{A}{2}|G(j\omega_0)|\\
+y(t) = \sum_{i=1}^{n}e^{p_it}+2|\alpha_0|\cos(\omega_0t+\phi)=AM\cos(\omega_0t+\phi)\\
+M=|G(j\omega_0)|\\
+\phi= \angle G(j\omega_0)
+$$
+
+
+The important part is the frequency response of such a system will converge to a sin term if the system is stable. M and $\phi$ are determined totally by the input frequency. By measuring the response of different input frequency, we can get the features of system.
+
+Two characteristic value for frequency-response is **bandwidth** and **resonant peak**. Bandwidth can be defined as the frequency where magnitude drops to a certain ratio. It can be used to measure the response speed, The resonant peak can be used to measure the overshoot.
+
+### Bode Graph
+
+The idea in Bode’s method is to plot magnitude curves using a logarithmic scale and phase curves using a linear scale, based on
+$$
+\lg(Me^{i\phi})=\lg(M)+i\phi\lg(e)
+$$
+If we use db as the unit for magnitude, the graph becomes the magnitude in decibels versus $\lg(\omega)$,  since we are not actually drawing the power in the definition of the db, so the unit for the |G| axis is usually 20db.
+
+The unit of $j\omega$ axis can be **decade**(10,100,1000...), or **octave**(2,4,8...).
+
+The draw Bode Graph, a good way is to write the transfer function in the bode form:
+$$
+KG(s) = K_0\frac{(j\omega\tau_1 + 1)(j\omega\tau_2 + 1)\cdots}{(j\omega)^n(j\omega\tau_a + 1)(j\omega\tau_b + 1)\cdots}\\
+\lg(KG(s)) = \lg K_0 +\lg (j\omega\tau_1 + 1) + \lg (j\omega\tau_1 + 1)-\lg (j\omega\tau_a + 1)- \lg (j\omega)^n\cdots
+$$
+We can analyze the result by dividing the result into three classes, for each class, what matters is **Asymptote**, **Slope on the trasition point**, **Value on the trasition point** :
+
+1. $K_0(j\omega)^n$
+
+   $\lg K_0(j\omega)^n = \lg K_0 + n\log (j\omega)$
+
+   The graph for this case is a line with slope of n or 20*n(db/decade)
+
+2. $(j\omega\tau_1 + 1)$
+
+   $(j\omega\tau_1 + 1) \approx 1 ,\omega\approx0,(j\omega\tau_1 + 1)\approx j\omega\tau_1,\omega  \to \infty$
+
+   The breakpoint $\omega = 1 /\tau_1$ is a trasition point with the slope of 1 or 20(db/decade)
+
+   <img src="FeedbackControl.assets/Screen Shot 2021-04-23 at 8.46.47 AM.png" alt="Screen Shot 2021-04-23 at 8.46.47 AM" style="zoom:33%;" /><img src="../../../../../../Library/Application Support/typora-user-images/Screen Shot 2021-04-23 at 8.47.14 AM.png" alt="Screen Shot 2021-04-23 at 8.47.14 AM" style="zoom:33%;" />
+
+3. $((\frac{j\omega}{\omega_n})^2+2\zeta(\frac{j\omega}{\omega_n}+1)$
+
+   The breakpoint $\omega = \omega_n$ with the slope of 2 or 40 (db/decade)
+
+Since the phase angle are sumed for the composite curve, we can draw approximate graph for each interval. 
+
+All above discussion are based on a fact that $\tau > 0$, which is not always the case. For system with $\tau_i > 0$, namely, all zeros and poles in LHP, the phase in $0^{\circ}$ when $\omega = 0$. Such systems are called **Minimum-Phase Systems**. For system wich zeros or poles in RHP, the initial phase with not be zero ,which is called **Non-Minimum-Phase Systems**
+
+### Steady-State Error
+
+When $\omega \approx 0$, we have 
+$$
+KG(\omega) \approx K_0(j\omega)^n
+$$
+Compare the form with 
+$$
+K_n = s^nD_{cl}G(s)
+$$
+We can find that K at n =0,-1,-2 equals $K_p,K_v,$etc.
+
+For a simple system like:
+
+<img src="FeedbackControl.assets/Screen Shot 2021-04-23 at 10.35.06 AM.png" alt="Screen Shot 2021-04-23 at 10.35.06 AM" style="zoom:33%;" />
+
+ From the Root locus, we know that the neurtral stability condition is 
+$$
+|KG(s)| = 1 \quad \angle G(s) = 180^{\circ}
+$$
+According to Bode Graph, we can find the $\omega$ satisfies the angle condition, and we can draw a series lines with different K to find the neutral stability K. However, the grapha is not rigorous, for which we broach Nyquist criterion.
+
+### The Nyquist Stability Criterion
+
+The Nyquist Criterion gives a perfect clarification of the relationship between the open-loop frequency response and  the number of closed-loop poles of the system in the RHP. It is based on the **argument principle**.
+
+> **argument principle**:
+>
+> A contour map of a complex function will encircle the origin (Z-P) times, where Z is the number of zeros and P is the number of poles of the function inside the contour.
+
+The method of drawing a contour and analyze the contour map of the transfer function is called a **contour evaluation**. For a system with $\mathcal{J}(s) = \frac{KG(s)}{1+KG(s)}$, we do a contour evaluation for $KG(s)$, and check the encirclements of -1. We can get the information of RHP zeros nad poles.This method is called **Nyquist Plot** or **Polar Plot**.
+
+More often, engineers want to get the K range where the system is stable. To do this, we can do contour evaluation for G(s) and to check its encirclements of -1/K. Since the poles of G(s) can always be gotten, we calculate the (N+P) to get the zeros of the system, which is the poles of the original system.
+
+### Stability Margins
+
+The **Gain Margin(GM)** is the **factor** by which the gain can be increased (or decreased in certain cases) before instability results based on the current state if the argument condition is satisfied. If |GM| > 0, the system is stable.
+
+The **Phase Margin(PM)** is the amount by which the phase exceeds $180^{\circ}$ if value condition is satisfied. 
+
+The term **crossover frequency**, is often used to refer to the frequency at which the magnitude is unity, or 0 db.
+
+<img src="FeedbackControl.assets/Screen Shot 2021-04-26 at 1.56.02 PM.png" alt="Screen Shot 2021-04-26 at 1.56.02 PM" style="zoom:33%;" />
+
+GM and PM are clear both on Bode plot and Nyquist plot.
+
+ ### GM and PM limitations
+
+For any first- or second-order system. $GM = \infty$ since the phase never crosses the $180^{\circ}$ line. This just means that GM is no longer a useful parameter. For high order system, the phase may cross the line for many times, where PM and GM need to be clarified.
+
+**Vector Margin** is also introduced to remove the ambiguity. 
 
 
 
@@ -474,15 +606,101 @@ $$
 
 
 
- 
+# Week 4
 
+## State-Space Design
 
+The basic aim for state-space design is to determine the compensation.
 
+*State-Variable Form*
+$$
+\dot{\bold{x}} = \bold{Ax}+\bold{Bu}\\
+\bold{y} = \bold{Cx}+\bold{Du}
+$$
+A is called system matrix, B is called input matrix, C is called output matrix, D is called direct transmission term.
 
+For a SISO systme, u is a scalar, so is y.
 
+```matlab
+sys = ss(A, B, C, D)
+step(sys)
+```
 
+We can transform between ss description and tf description 
 
+```matlab
+[num den] = ss2tf(A,B,C,D)
+[z p k] = ss2zp(A,B,C,D)
+[z p k] = tf2zp(num, den)
+```
 
+### Transfer function to State-variable form
+
+First thing we want to know to is how to transfer from transfer function to a state space. For a transfer function, the state space is not unique, there are several basic forms for choosing state variables, which are called canonical forms.
+
+For a transfer funciton 
+$$
+G(s) = \frac{b(s)}{a(s)} = \frac{b_1s^{n-1}+b_2s^{n-2}+\cdots+b_n}{s^n+a_1s^{n-1}+\cdots+a_n}
+$$
+We have https://en.wikibooks.org/wiki/Control_Systems/Standard_Forms
+
+#### Controllability
+
+A natural idea is: whether a state-variable form can be transform to one of the above canonical forms?
+
+For controllable canonical form, we can explictyly give the transformation matrix if the  controllability matrix
+$$
+C = [B\quad AB\quad \cdots \quad A^{n-1}B]
+$$
+is nonsingular. We call this state-variable form **Controllable**.
+
+Once a state-space is chosen, you cannot change its controllablity using nonsingluar linear transformation.
+
+For modal form, we see it's equvalent to the diagonalizablity of A. 
+
+### State-variable form to transfer function
+
+We apply Laplace transformaition to the state-variable form 
+$$
+G(s) = C(sI-A)^{-1}B+D
+$$
+What we are intererted is the state-variable form of zeors and poles.
+
+If $p_i$ is a pole of the system, it means there exists $x_0$ makes 
+$$
+x(t) = Ke^{p_it}
+$$
+with u = 0, namely **$p_i$ is the eigenvalue of A**
+
+If $z_i$ is a zero of the system, it means that for input with generalized frequency $z_i$, output $y \equiv 0 $
+
+We finally get 
+$$
+\begin{pmatrix}
+z_i-A & -B \\
+C & D
+\end{pmatrix}
+\begin{pmatrix}
+x_0 \\
+u_0
+\end{pmatrix} = 0
+$$
+
+### Control Law Design for full-state feedback
+
+<img src="FeedbackControl.assets/Screen Shot 2021-09-15 at 6.59.40 AM.png" alt="Screen Shot 2021-09-15 at 6.59.40 AM" style="zoom: 50%;" />
+
+This is the basic structure of a feedback control system.
+
+Assume we've got enough sensors that we know $\vec{x}$ explicitly, which is called **Full State**. Then the diagram is simplified to 
+
+<img src="FeedbackControl.assets/Screen Shot 2021-09-15 at 7.31.54 AM.png" alt="Screen Shot 2021-09-15 at 7.31.54 AM" style="zoom:33%;" />
+
+Then we can caculate the poles of system using 
+$$
+\det(sI - (A-BK)) = 0
+$$
+since we have n free parameteres in K, we can shift poles to where I want with a large freedom. Two ways can be used to determine  K under a 
 
 
 
