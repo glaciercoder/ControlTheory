@@ -1,4 +1,9 @@
+[toc]
+
+
+
 # Getting started
+
 This note is written mainly for learning Feedback Control via reading *Feedback Control of Dynamic Systems* and some papers. The pictures, if not marked specially, are from the original book.
 
 Thanks for fellow xzy's support.
@@ -169,7 +174,7 @@ The standard form of the second order system is
 $$
 H(s) = \frac{\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2}
 $$
-where $\zeta$ is the damp ratio, $\omega_n$ is the natural frequency.
+where $\zeta$ is the damp ratio, $\omega_n$ is the natural frequency.  $\zeta < 1$ is what we call **Lightly Damped** system
 
 The standard impulse response :
 $$
@@ -356,9 +361,7 @@ equations for the system output and the various sensitivity functions need to be
 
 ### System Type
 
-In the general tracking problem, the reference input can often be adequately approximated as if it were a polynomial in time. So it's useful to analyze 
-
-**steady-state errors in stable systems with polynomial inputs**.
+In the general tracking problem, the reference input can often be adequately approximated as if it were a polynomial in time. So it's useful to analyze **steady-state errors in stable systems with polynomial inputs**.
 
 We have
 $$
@@ -481,6 +484,34 @@ $$
 4. The break-in point and breakaway points satisfy the equation $\frac{dK}{ds} = 0$, and K must be positive.
 5. Departure angle and arrival angle.
 6. The intersection point with imaginary axis: Routh Criterion.
+
+These guildlines can only limit the root locus to some types, but not give locus definitely. 
+
+### Design using dynamic compensation
+
+Using root locus method, we can choose a propotional gain to move poles. However, for many processes, it's not enough changing gain. Under these situations, it's nessasary to change the prossess itself, which is called **compensation**. Three main compensations are used:
+
+- Lead compensation: approximates the function of PD control and acts mainly to speed up a response by lowering rise time and decreasing the transient overshoot.
+- Lag compensation: approximates the function of PI control, and is usually used to improve the steady-state accuracy of the system. 
+- Notch compensation: used to achieve stability for systems with lightly damped flexible modes.
+
+$$
+D_c(s) = \frac{s+z}{s+p}
+$$
+
+is called lead compensation and lag compensation for z < p and z >p respectively. They get their name by the phase impact on frequency analysis. The compensation introduces a phase change by
+$$
+\phi = \tan^{-1}(\frac{\omega}{z})-\tan^{-1}(\frac{\omega}{p})
+$$
+
+
+#### Lead compensation
+
+For PD control, noise from the sensor may be amplified, so lead compensation is proposed. If p is not that far from the z, then the total effect of lead compensation is not a pure derivative. So there is a tradeoff for p.
+
+#### Lag Compensation
+
+Though lag compensation has the same form with lead compensation, they differ with each other by the choose of z and p. Lead compensation use such z and p as to cancell the pole of the plant and get a higher damping ratio. Lag compensation is usually used after the lead compensation to lower the steady state error by elevate the DC gain. By choosing z and p far smaller than natural frequency, lag compensation don not destroy our effect in lead compensation What we want is just the ratio of z/p.
 
 
 
@@ -677,7 +708,7 @@ If $z_i$ is a zero of the system, it means that for input with generalized frequ
 We finally get 
 $$
 \begin{pmatrix}
-z_i-A & -B \\
+z_iI-A & -B \\
 C & D
 \end{pmatrix}
 \begin{pmatrix}
@@ -692,7 +723,7 @@ $$
 
 This is the basic structure of a feedback control system.
 
-Assume we've got enough sensors that we know $\vec{x}$ explicitly, which is called **Full State**. Then the diagram is simplified to 
+Assume we've got enough sensors that we know $\vec{x}$ explicitly, which is called **Full State**，and suppose no reference point is given . Then the diagram is simplified to 
 
 <img src="FeedbackControl.assets/Screen Shot 2021-09-15 at 7.31.54 AM.png" alt="Screen Shot 2021-09-15 at 7.31.54 AM" style="zoom:33%;" />
 
@@ -700,11 +731,57 @@ Then we can caculate the poles of system using
 $$
 \det(sI - (A-BK)) = 0
 $$
-since we have n free parameteres in K, we can shift poles to where I want with a large freedom. Two ways can be used to determine  K under a 
+since we have n free parameteres in K, we can shift poles to where I want with a large freedom. Two ways can be used to determine  K under a given set of poles. One is transform the state-space to control canonical forms, the other is Ackerman method.
+$$
+K = [0 \cdots 0 \quad1]C^{-1}\alpha_c(A) \\
+\alpha_c(A) = A^n+p_1A^{n-1}+\cdots+p_nI \\
+C = [B \quad AB \cdots A^{n-1}B]
+$$
+For substantiation, see https://en.wikipedia.org/wiki/Ackermann%27s_formula
+
+#### More on controllablity
+
+When system is not controllable, we can not shift its poles at will. **Uncontrollable systems** have certain modes, or subsystems, that are unaffected by the control. This usually means that parts of the system are physically disconnected from the input(Like there is a zero in B). No mathematical test can replace the control engineer’s understanding of the physical system. Often the physical situation is such that every mode is controllable to some degree, and, while the mathematical tests indicate the system is controllable, certain modes are so weakly controllable that designs to control them are virtually useless. The system has to work harder and harder to achieve control as controllability slips away and thus drive the actuators into saturation. To move the poles a long way requires large gains.
+
+#### Introduce reference point
+
+Recall that a reference point is the value we want y to track. In steady state, we want
+$$
+\vec{x} =  \vec{x}_{ss} \quad \vec{\dot{x}} = 0\\
+y = y_{ss} = r_{ss} \\
+u = u_{ss} \\
+$$
+Suppose that $\vec{x}_{ss} = N_xr_{ss}, u_{ss} = N_ur_{ss}$, plug these in our plant, we get
+$$
+\begin{pmatrix}
+A & B\\
+C & D
+\end{pmatrix}
+\begin{pmatrix}
+N_x\\
+N_u
+\end{pmatrix} =\begin{pmatrix}
+0\\
+1
+\end{pmatrix} 
+$$
+It's natural for us to set $u = u_{ss} - K(\vec{x}-\vec{x}_{ss})$
+$$
+u = -K\vec{x}+(N_u+KN_{x})r
+$$
+That is <img src="FeedbackControl.assets/Screen Shot 2021-09-15 at 9.15.59 AM.png" alt="Screen Shot 2021-09-15 at 9.15.59 AM" style="zoom:33%;" /> ($\bar{N} = N_u +KN_x$)
 
 
 
+or <img src="FeedbackControl.assets/Screen Shot 2021-09-15 at 9.24.50 AM.png" alt="Screen Shot 2021-09-15 at 9.24.50 AM" style="zoom:33%;" />,which is more rubust sometimes.
 
+By now, we have established our control law, if we caculate the zeros of the system
+$$
+\vec{\dot{x}} = (A-BK)\vec{x}+\bar{N}u
+$$
+we find its exactly the same as the initial system, that is :
+
+==When full-state feedback is used , the zeros remain unchanged by the feedback.==
 
 
 
