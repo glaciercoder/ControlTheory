@@ -487,6 +487,8 @@ $$
 
 These guildlines can only limit the root locus to some types, but not give locus definitely. 
 
+For now, Matlab will draw root locus perfectly so the above rules seem to be useless, but these rules give us a new perspective to check our controller. For example, when we add a zero near the pole, according to the rule of departure angle we may well expect that root will be shifted to LHP.
+
 ### Design using dynamic compensation
 
 Using root locus method, we can choose a propotional gain to move poles. However, for many processes, it's not enough changing gain. Under these situations, it's nessasary to change the prossess itself, which is called **compensation**. Three main compensations are used:
@@ -513,9 +515,15 @@ For PD control, noise from the sensor may be amplified, so lead compensation is 
 
 Though lag compensation has the same form with lead compensation, they differ with each other by the choose of z and p. Lead compensation use such z and p as to cancell the pole of the plant and get a higher damping ratio. Lag compensation is usually used after the lead compensation to lower the steady state error by elevate the DC gain. By choosing z and p far smaller than natural frequency, lag compensation don not destroy our effect in lead compensation What we want is just the ratio of z/p.
 
+#### Notch compensation
 
+Notch compensation is used to prevent the resonance in system by changing their phase.
 
+### Successive Loop Closure
 
+Sometimes it's useful to introduce more than one feedback loop, by introducing inner and outer loop, we can design more stable system. For example:
+
+<img src="FeedbackControl.assets/Screen Shot 2021-09-17 at 9.29.21 AM.png" alt="Screen Shot 2021-09-17 at 9.29.21 AM" style="zoom:33%;" />
 
 ## The Frequency-Response Design Method
 
