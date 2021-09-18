@@ -683,11 +683,11 @@ G(s) = \frac{b(s)}{a(s)} = \frac{b_1s^{n-1}+b_2s^{n-2}+\cdots+b_n}{s^n+a_1s^{n-1
 $$
 We have https://en.wikibooks.org/wiki/Control_Systems/Standard_Forms
 
+A natural idea is: whether a state-variable form can be transformed to one of the above canonical forms?
+
 #### Controllability
 
-A natural idea is: whether a state-variable form can be transform to one of the above canonical forms?
-
-For controllable canonical form, we can explictyly give the transformation matrix if the  controllability matrix
+For controller canonical form, we can explictyly give the transformation matrix if the  **controllability matrix**
 $$
 C = [B\quad AB\quad \cdots \quad A^{n-1}B]
 $$
@@ -696,6 +696,19 @@ is nonsingular. We call this state-variable form **Controllable**.
 Once a state-space is chosen, you cannot change its controllablity using nonsingluar linear transformation.
 
 For modal form, we see it's equvalent to the diagonalizablity of A. 
+
+#### Observability
+
+For observer canonical form, we can transform to it if **observability matrix**
+$$
+\mathcal{C} = \begin{pmatrix}
+C \\
+CA \\
+\vdots \\
+CA^{n-1}
+\end{pmatrix}
+$$
+is nonsingular(or full rank for column )
 
 ### State-variable form to transfer function
 
@@ -739,13 +752,13 @@ Then we can caculate the poles of system using
 $$
 \det(sI - (A-BK)) = 0
 $$
-since we have n free parameteres in K, we can shift poles to where I want with a large freedom. Two ways can be used to determine  K under a given set of poles. One is transform the state-space to control canonical forms, the other is Ackerman method.
+since we have n free parameteres in K, we can shift poles to where I want with large freedom. Two ways can be used to determine  K under a given set of poles. One is transform the state-space to control canonical forms, the other is Ackerman method.
 $$
 K = [0 \cdots 0 \quad1]C^{-1}\alpha_c(A) \\
 \alpha_c(A) = A^n+p_1A^{n-1}+\cdots+p_nI \\
 C = [B \quad AB \cdots A^{n-1}B]
 $$
-For substantiation, see https://en.wikipedia.org/wiki/Ackermann%27s_formula
+For a proof, see https://en.wikipedia.org/wiki/Ackermann%27s_formula
 
 #### More on controllablity
 
@@ -791,5 +804,75 @@ we find its exactly the same as the initial system, that is :
 
 ==When full-state feedback is used , the zeros remain unchanged by the feedback.==
 
+#### Choose poles
 
+One problem wasn't solved is where we should place our poles. There are two ways to decide poles, one is to choose a pair of dominant poles to mimic the second-order system, the other is based on LQR.
+
+##### LQR control
+
+For a typical system, we define the tracking error z and loss $\mathcal{J}$
+$$
+z = C_1x \\
+\mathcal{J} = \int_0^{\infty}[\rho z^2+u^2]dt
+$$
+To minimize loss, we can prove poles are given by *SRL equation*
+$$
+1+\rho G_0(s)G_0(-s) = 0
+$$
+where $G_0 = \frac{Z(s)}{U(s)}$
+
+### Estimator design
+
+Estimator is used when not all variables in state space is used for feedback. What we want is to reconstruct the system using part of the observed variable. Namely, **get real $\vec{x}$  from some computed variables**
+
+#### Full-order estimators
+
+If we construct a model with the same dynamics with process, than we can well expect the output $\hat{y}$ from our $\hat{x}$ to be same with that from x, the question is we can't get the inital value of x. Our strategy is to measure output y and make a feedback system to make out estimation to be the same as y, this is called full-order estimators:
+
+<img src="FeedbackControl.assets/Screen Shot 2021-09-17 at 9.48.05 PM.png" alt="Screen Shot 2021-09-17 at 9.48.05 PM" style="zoom:33%;" />
+
+We define error $\bar{x} = x - \hat{x}$,  we can get 
+$$
+\dot{\hat{x}} = A\hat{x}+Bu+L(y-C\hat{x})\\
+\dot{\bar{x}} = (A-LC)\bar{x}
+$$
+we can choose L in the same way for K and make error to converge. We also have the ackerman formula for s
+
+ We can connect the full state feedback with this to check whether our estimate works.
+
+<img src="FeedbackControl.assets/Screen Shot 2021-09-17 at 10.01.24 PM.png" alt="Screen Shot 2021-09-17 at 10.01.24 PM" style="zoom:50%;" />
+
+#### More on observability
+
+Roughly speaking, observability refers to our ability to deduce information about all the modes of the system by monitoring only the sensed outputs. Unobservability results when some mode or subsystem is disconnected physically from the output and therefore no longer appears in the measurements.
+
+We have Ackerman formula for observablity
+$$
+L = \alpha_e(A)\mathcal{C}^{-1}\begin{pmatrix}
+0 \\
+0 \\
+\vdots \\
+1
+\end{pmatrix}
+$$
+
+#### Reduced-Order Estimators
+
+If we've got some good sensors to measure some of the state variables, then not all of them need estimating. The **reduced-order estimator** reduces the order of the estimator by the number (1 in this text) of sensed outputs. The key point in mechanism of reduced-order is to see terms containing measured variables as some kind of input and measurement and use the same techs as    full-order estimator.
+
+#### Estimators with noise
+
+There are always two kinds of noise existing in control: process noise $w$ and sensor noise $\nu$. Taking these into consideration, we get 
+$$
+\dot{\vec{x}} = A\vec{x}+Bu+B_1w \\
+y = C\vec{x} + \nu \\
+\dot{\bar{x}} = (A-LC)\bar{x}+B_1w-L\nu
+$$
+Just like the tradeoff between control effort u and reponse speed r, there is also tradeoff between two kinds of noise. If L is very small, then the effect of sensor noise is removed, but the estimator’s dynamic response will be “slow,” so the error will not reject effects of very well.On the other hand, if is large, then the estimator response will be fast and the disturbance or process noise will be rejected, but the sensor noise, multiplied by L, results in large errors.
+
+Just like what we did in LQR method, we introduce q as the ratio of $w/ \nu$, then choose poles use SRL equation
+$$
+1+qG_e(-s)G_e(s) = 0
+$$
+where $G_e$ is  the transfer function from the process noise to the sensor output.
 
