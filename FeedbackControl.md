@@ -509,7 +509,7 @@ $$
 
 #### Lead compensation
 
-For PD control, noise from the sensor may be amplified, so lead compensation is proposed. If p is not that far from the z, then the total effect of lead compensation is not a pure derivative. So there is a tradeoff for p.
+For PD control, noise from the sensor may be amplified, so lead compensation is proposed. If p is not that far from the z, then the total effect of lead compensation is not a pure derivative. So there is a tradeoff for p. 
 
 #### Lag Compensation
 
