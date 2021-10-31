@@ -89,6 +89,8 @@ $$
 A_d = e^{AT} \quad B_d = \int_0^Te^{A\tau}d\tau B
 $$
 
+Attention, when we discretize a system, we don't use $\dot{x} = (x[(k+1)T]-x[kT])/T$, instead we use its solution and perform discretization.
+
 ## Equivalent state equation and Canonical Form
 
 As we have seen in *Feedback control of dynamic system*, choicefor state variable is not unique, if we take a nonsingluar linear transformation to convert a state equation A to B, we say that A and B are **algebrically equivalent**. A weaker assertion is that if two system have the same transfer equation, then two systems are **zero-state equivalent**, which require [A B C D] and $[\bar{A} \quad \bar{B} \quad \bar{C} \quad \bar{D}]$
@@ -209,9 +211,9 @@ In *Feedback control of dynmaic system*, we see that controlablity is defined as
 
 >*The state equation or the pair* (**A**, **B**) *is said to be* controllable *if for any initial state* $x(0) =x_0$ and any final state $x_1$, there exists an input that transfers $x_0$ to$ x_1$ *in a finite time.* 
 
-We then prove two definitions are exactly equivalent, actually we have TFAE:
+We then prove two definitions are exactly equivalent, actually we have TFAE:[Equivalent conditions for controllablity](https://en.wikipedia.org/wiki/Controllability_Gramian)
 
-[Equivalent conditions for controllablity](https://en.wikipedia.org/wiki/Controllability_Gramian)
+For LTI system ,we can get exactly what input we need using controll Gramian
 
 We can see more details in the structure of B and controllability matrix: 
 
@@ -223,31 +225,39 @@ $$
 b_1 &\cdots &b_p|Ab_1 &\cdots &Ab_p|\cdots|A^{n}b_1 &\cdots &A^{n}b_p
 \end{pmatrix}
 $$
-We suppose B to be full rank, then for each $b_i$, there exists a maximum $\mu_i$ ,s.t. $b_i,...,A^{\mu_i}b_i$ are linearly independent, we call ${\mu_1,...,\mu_n}$ are controllability indices, its maximum is called **controllablity index**.
+We suppose B to be full rank(without loss of generality), then for each $b_i$, there exists a maximum $\mu_i$ ,s.t. $b_i,...,A^{\mu_i}b_i$ are linearly independent, we call ${\mu_1,...,\mu_n}$ are controllability indices, its maximum is called **controllablity index**.
 
  The set of the controllability indices are invariant under any equivalence transfor- mation and any rearrangement of the inputs.
 
 ## Observability
 
+Here we know the exact definition of the observability
 
+>The state equation  is said to be observable if for any unknown initial state **x**(0)*, there exists a finite* $t_1$ > 0 such that the knowledge of the input **u** *and the output* **y** *over* $[0, t_1]$ *suffices to determine uniquely the initial state* **x**(0)*.* 
 
+In *Feedback control of dynmaic system*, we see that there is a duality for controllablity and observability. We put it clear here:
 
+>The pair (**A**, **B**) is controllable if and only if the pair $(A^T, B^T)$ is observable.
 
+Using the duality, we get TFAE:[Equivalent conditions for observability](https://en.wikipedia.org/wiki/Observability_Gramian)
 
+Similarly we can define observability indices, its maximum is called **observability index**.
 
+## Canonical Decomposition
 
+Uncontrollable always means a subsystem is not connected to our input and canonical decomposition is to express this clearly. 
 
+<img src="Linear_System.assets/Screen Shot 2021-09-27 at 10.10.17 AM.png" alt="Screen Shot 2021-09-27 at 10.10.17 AM" style="zoom:50%;" />
 
+Attention equivalence transformation is actually a zero-state equivalence. 
 
+Just like uncontrollability means that a subsystem is not connected to input, unobservability means that a subsystem is not connected to output. Combine decomposition for two matrices, we get **Kalman decomposition**
 
+<img src="Linear_System.assets/Screen Shot 2021-09-27 at 10.19.54 AM.png" alt="Screen Shot 2021-09-27 at 10.19.54 AM" style="zoom:30%;" />
 
+Kalman decomposition tells us an important fact that information contains are different. For a chosen system, transfer function only gives the information that the part both connected to input and output.
 
-
-
-
-
-
-
+An advantage for using Jordan form is that the condition for controllablity and observability can be experessed using B and C. 
 
 
 
