@@ -72,6 +72,12 @@ SP_s = 0 \quad P_{s}B = 0
 $$
 ==Attention:== the concept of equivalent control is to justify the existence and uniqueness of steaty sliding motion, and can not be put into practice due to the exitence of unknown perturbation.
 
+Equivalent control is of great significance since real control system has a bandwidth, the actual control signal 
+$$
+u(t) = u_{eq} + (u(t)- u_{eq}(t))
+$$
+The last term may be cut off by the bandwidth, so the actual control is just equivalent control. Actually, $u_{eq}$ is also the secret to cancellation of the unknown disturbance.
+
 
 
 ## Order reduction and Matched uncertainty rejection

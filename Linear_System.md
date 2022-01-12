@@ -28,6 +28,10 @@ totally defines a system from $t_0$
 
 `transfer function`: is irrational for a distributive system and rantional for a lumped system(typically)
 
+`proper`: A transfer function is proper when its denominator's order is no greater than nominator's, moreover, it's strict proper if less. 
+
+`Real system`: real system is proper, but the reason is different for continous and discrete system. For continous, improper means a amplifier for high frequency, which is not expected and should be avoided. For discrete, improper means the system is not causal.
+
 `blocking zero`: a zero of every entry of transfer matrix
 
 When we hanve a MIMO system
@@ -36,7 +40,9 @@ $$
 $$
  ![Screen Shot 2021-09-21 at 9.45.12 AM](Linear_System.assets/Screen Shot 2021-09-21 at 9.45.12 AM.png)
 
-## Functios of matrix
+
+
+## Functions of matrix
 
 ### Polynomials of matrix
 
@@ -73,17 +79,31 @@ The most important property of $\mathcal{A}$ is that its eigenvalue equal A's ei
 
 
 
+## Norms of matrix
+
+Most commonly used norms of matrix is induced norm, defined as 
+$$
+||A|| = \sup_{||x|| = 1}||Ax||
+$$
+Especially, when norms of x use p-norm :
+$$
+p = 1: ||A|| = \max_{j}\sum_i|a_{ij}| \\
+p = 2: ||A|| = \max \sigma_i \\
+p = \infty: ||A|| = \max_i \sum_j |a_{ij}|
+$$
+
+
 # Chapter 4
 
 In *Feedback control of dynamic system*, we have seen how to get dynamic reponse from its internal and external description, here we will do it more generally.
 
 ## Solution on time domain and discretization
 
-Solve the ODE for state variable, we get
+The solution for constant coefficient ODE is: 
 $$
 \vec{x} = e^{At}\vec{x}(0)+\int_0^te^{A(t-\tau)}B\vec{u}d\tau
 $$
-Define $\vec{x}[k] = \vec{x}[kT]$, and suppose $\vec{u}$ is a series $\vec{u}[k]$, than state equation can be discretized
+Define $\vec{x}[k] = \vec{x}[kT]$, and suppose $\vec{u}$ is a series $\vec{u}[k]$, than state equation can be discretized using the solution: 
 $$
 \vec{x}[k+1] = A_d\vec{x}[k]+B_d\vec{u}[k] \\
 A_d = e^{AT} \quad B_d = \int_0^Te^{A\tau}d\tau B
@@ -104,9 +124,13 @@ For some transformation, the state equation is converted to specials forms that 
 
 Given $\hat{G}(s)$, find its state equation is called system realization, obviously there are conditions for realizability. We assert
 
- $\hat{G}(x)$ is realizable if and only if  $\hat{G}(s)$ is a proper rational matrix, what we mean by proper rational matrix is degree of denominator is no less than that of nominator  and strict proper when they are not equal.
+> (Thm)  $\hat{G}(x)$ is realizable if and only if  $\hat{G}(s)$ is a proper rational matrix.
 
-Actually the realization is connected with **Control cononical form**
+
+
+Proof: Divide the $\hat{G}(s) = \hat{G}_{sp}+\hat{G}(\infty)$, 
+
+If realizable, use $A^{-1} = \frac{A^*}{|A|}$, it's easy to show $\hat{G}(s)$ is proper. Conversely, can check the following is a kind of realization.
 $$
 \hat{G}(s) = \hat{G}_{sp}(s)+\hat{G}(\infty) \\
 \hat{G}_{sp}(s) = \frac{1}{d(x)}\bold{N}(s)=\frac{1}{d(s)}(\bold{N_1}s^{r-1}+\cdots+\bold{N_r}) \\
@@ -126,7 +150,9 @@ Choose \quad \bold{A} = \begin{pmatrix}
 \end{pmatrix} \\
 \bold{C} = [\bold{N_1} \quad \bold{N_2} \quad\cdots\quad \bold{N_r}] \quad \bold{D} = \hat{G(\infty)}
 $$
-Attention this realization is not unique.
+Actually the realization is connected with **Control cononical form**
+
+Attention this realization is not unique. For control cononical form, 
 
 ## Solution to LTV system
 
@@ -260,4 +286,14 @@ Kalman decomposition tells us an important fact that information contains are di
 An advantage for using Jordan form is that the condition for controllablity and observability can be experessed using B and C. 
 
 
+
+
+
+
+
+# Interesting Problem
+
+## Chapter 2
+
+2.4 Trunction operator
 

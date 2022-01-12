@@ -17,7 +17,8 @@ Thanks for fellow xzy's support.
 ## Basic Ideas for Feedback Control
 1. Control is the process of making a system variable adhere to a particular value, called the **reference value**. A system designed to follow a changing reference is called **tracking control or a servo**. A system designed to maintain an output fixed regardless of the disturbances present is called a **regulating control or a regulator**.
 2. A simple feedback system consists of the **process **whose output is to be controlled, the **actuator/plant** whose output causes the process output to change, a reference command signal, and output sensors that measure these signals, and the **controller** that implements the logic by which the control signal that commands the actuator is calculated. 
-3. A well-designed feedback control system will be **stable, track a desired input or setpoint , reject disturbances, and be insensitive (or robust) to changes in the math model used for design**.
+3. A well-designed feedback con
+3. trol system will be **stable, track a desired input or setpoint , reject disturbances, and be insensitive (or robust) to changes in the math model used for design**.
 4. The theory and design techniques of control have come to be divided into two categories: **classical control** methods use Laplace transforms (or z-transform) and were the dominant methods for control design until **modern control** methods based on ODEs in state form were introduced into the field starting in the 1960s. 
 
 
@@ -77,7 +78,7 @@ $$
 
 ### Exponential signal response
 
-The dynamic response for a singal with the form $u(t)=e^(s_0t)$ is very important, and is closely connected with the frequency response.
+The dynamic response for a singal with the form $u(t)=e^{s_0t}$ is very important, and is closely connected with the frequency response.
 $$
 y(t) = \int_{-\infty}^{+\infty}h(\tau)u(t-\tau)d\tau = \int_{-\infty}^{+\infty}h(\tau)e^{-s_0\tau}d\tau e^{s_0t}=H(s_0)e^{s_0t}
 $$
